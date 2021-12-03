@@ -45,5 +45,8 @@
     "gulp-sourcemaps": "^2.6.5",
     "gulp-open": "^3.0.1"
   },
-  "homepage": "http://creative-tim.com/product/material-dashboard"
+  "homepage": "http://creative-tim.com/product/material-dashboard",
+  "dependencies": {
+    "moment": "^2.29.1"
+  }
 }
