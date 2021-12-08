@@ -1,52 +1,27 @@
 {
-  "name": "material-dashboard",
+  "name": "microfrontend-adminpagos",
   "version": "1.0.0",
-  "description": "Freebie Dashboard for Bootstrap 5",
-  "main": "pages/dashboard.html",
-  "directories": {
-    "example": "root"
-  },
+  "description": "",
+  "main": "app.js",
   "scripts": {
-    "open-app": "gulp open-app",
-    "start": "npm run open-app",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "gulp-watch"
+    "dev": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/creativetimofficial/material-dashboard.git"
+    "url": "git+https://github.com/Lauralopezfre/Microfronten"
   },
-  "keywords": [
-    "material dashboard",
-    "bootstrap 5",
-    "dashboard",
-    "creative tim",
-    "html dashboard",
-    "html css dashboard",
-    "web dashboard",
-    "freebie",
-    "free bootstrap dashboard",
-    "css3 dashboard",
-    "bootstrap dashboard",
-    "frontend",
-    "responsive bootstrap dashboard"
-  ],
-  "author": "Creative Tim <hello@creative-tim.com> (https://www.creative-tim.com/)",
-  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/creativetimofficial/material-dashboard/issues"
+    "url": "https://github.com/Lauralopezfre/Microfronten/issues"
   },
-  "devDependencies": {
-    "gulp": "^4.0.2",
-    "gulp-autoprefixer": "^7.0.1",
-    "gulp-clean": "^0.4.0",
-    "gulp-install": "^1.1.0",
-    "gulp-sass": "^4.1.0",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-open": "^3.0.1"
-  },
-  "homepage": "http://creative-tim.com/product/material-dashboard",
-  "dependencies": {
-    "moment": "^2.29.1"
-  }
+  "homepage": "https://github.com/Lauralopezfre/Microfronten#readme"
 }
