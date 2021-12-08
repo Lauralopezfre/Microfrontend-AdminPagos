@@ -2,7 +2,7 @@ class CargarBoletos extends HTMLElement {
   #urlGateway = "http://localhost:3001/servicioPagos/";
   #urlGatewayNumPagos = "http://localhost:3006/servicioNumPagos/";
   #urlBoletos = this.#urlGateway + "boletosApartados";
-  #urlComprobantes = this.#urlGatewayNumPagos+"comprobantes/";
+  #urlComprobantes = this.#urlGatewayNumPagos + "comprobantes/";
 
   constructor() {
     super();
@@ -15,7 +15,6 @@ class CargarBoletos extends HTMLElement {
     this.#render(shadow);
     this.#agregarEstilos(shadow);
     this.#cargarBoletosApartados(shadow, idSorteo);
-    this.#guardarCambios(shadow, idSorteo);
     this.#revertirCambios(shadow);
     this.#preparaBotonesComprobante(shadow);
   }
@@ -28,7 +27,7 @@ class CargarBoletos extends HTMLElement {
   }
 
   #agregarScripts(shadow) {
-    let script= document.createElement("script");
+    let script = document.createElement("script");
     script.setAttribute("src", "https://cdn.jsdelivr.net/npm/sweetalert2@9");
     shadow.appendChild(script);
 
@@ -60,8 +59,7 @@ class CargarBoletos extends HTMLElement {
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Marcar pagado</th>
                       </tr>
                     </thead>
-                    <tbody id="cuerpo-tabla">
-                      
+                    <tbody id="cuerpo-tabla">                      
                     </tbody>
                   </table>
                 </div>
@@ -88,7 +86,8 @@ class CargarBoletos extends HTMLElement {
       return response.json();
     }).then((boletos) => {
       boletos.forEach(boleto => {
-        cuerpoTabla.innerHTML += `
+        if (boleto.comprobantePago != "") {
+          cuerpoTabla.innerHTML += `
                   <tr>
                       <td>
                           <div class="d-flex px-2 py-1">
@@ -116,10 +115,40 @@ class CargarBoletos extends HTMLElement {
                       </td>
                   </tr>
               `;
-
+        } else {
+          cuerpoTabla.innerHTML += `
+                  <tr>
+                      <td>
+                          <div class="d-flex px-2 py-1">
+                          
+                              <div class="d-flex flex-column justify-content-center">
+                              <h6 class="mb-0 text-sm">Número `+ boleto.numero + `</h6>
+                              <p class="text-xs text-secondary mb-0">`+ boleto.persona.nombre + `</p>
+                              </div>
+                          </div>
+                      </td>M
+                      <td>
+                        <p class="text-xs mb-0">Aun no se cargado algun comprobante</p>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                          <span class="badge badge-sm bg-gradient-success">`+ boleto.estadoBoleto + `</span>
+                      </td>
+                      <td class="align-middle text-center">
+                          <span class="text-secondary text-xs font-weight-bold">`+ new Date(boleto.movimientoBoleto.fecha).toLocaleString() + `</span>
+                      </td>
+                      <td class="align-middle text-center">
+                          <label class="switch ">
+                              <input id="${boleto._id}" type="checkbox">
+                              <span class="slider round"></span>
+                          </label>
+                      </td>
+                  </tr>
+              `;
+        }
+        this.#guardarCambios(shadow, idSorteo);
       });
+      this.#marcarPagadoSinComp(shadow)
     });
-
   }
 
   #getBoletosSeleccionados(shadow) {
@@ -132,13 +161,12 @@ class CargarBoletos extends HTMLElement {
     return pagando;
   }
 
-  #revertirCambios(shadow){
-
+  #revertirCambios(shadow) {
     let btnCancelar = shadow.querySelector("#btnCancelar");
     btnCancelar.onclick = (evt) => {
       evt.preventDefault();
       shadow.querySelectorAll("input[type=checkbox]:checked").forEach(element => {
-        element.checked=false;
+        element.checked = false;
       });
     }
   }
@@ -180,21 +208,35 @@ class CargarBoletos extends HTMLElement {
         alert('Primero debe seleccionar al menos 1 boleto.');
       }
     }
-
-
   }
 
-  #preparaBotonesComprobante(shadow){
+  #marcarPagadoSinComp(shadow) {
+    shadow.querySelectorAll("input[type=checkbox]").forEach(element => {
+      let boleto = new Object();
+      boleto.id = element.id;
+      if (boleto == "") {
+        element.addEventListener('click', function () {
+          if (element.checked) {
+            var opcion = confirm("¿Esta seguro que desea marcar como pagado el boleto sin comprobante?");
+            if (!opcion) {
+              element.checked = false
+            }
+          }
+        });
+      }
+    });
+  }
+
+  #preparaBotonesComprobante(shadow) {
     let botones = shadow.querySelector(".btnVerComprobante");
 
-  /*  botones.forEach(boton=>{
-      boton.onclick=(evt)=>{
-        evt.preventDefault();
-        Swal.fire('hola');
-      }
-    });*/
+    /*  botones.forEach(boton=>{
+        boton.onclick=(evt)=>{
+          evt.preventDefault();
+          Swal.fire('hola');
+        }
+      });*/
   }
-
 }
 
 window.customElements.define('boletos-pagados', CargarBoletos);
