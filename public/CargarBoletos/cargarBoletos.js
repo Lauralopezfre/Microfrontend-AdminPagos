@@ -16,7 +16,6 @@ class CargarBoletos extends HTMLElement {
     this.#agregarEstilos(shadow);
     this.#cargarBoletosApartados(shadow, idSorteo);
     this.#revertirCambios(shadow);
-    this.#preparaBotonesComprobante(shadow);
   }
 
   #agregarEstilos(shadow) {
@@ -109,7 +108,7 @@ class CargarBoletos extends HTMLElement {
                       </td>
                       <td class="align-middle text-center">
                           <label class="switch ">
-                              <input id="${boleto._id}" type="checkbox">
+                              <input id="${boleto._id}" type="checkbox" value="${boleto.comprobantePago}">
                               <span class="slider round"></span>
                           </label>
                       </td>
@@ -126,7 +125,7 @@ class CargarBoletos extends HTMLElement {
                               <p class="text-xs text-secondary mb-0">`+ boleto.persona.nombre + `</p>
                               </div>
                           </div>
-                      </td>M
+                      </td>
                       <td>
                         <p class="text-xs mb-0">Aun no se cargado algun comprobante</p>
                       </td>
@@ -138,7 +137,7 @@ class CargarBoletos extends HTMLElement {
                       </td>
                       <td class="align-middle text-center">
                           <label class="switch ">
-                              <input id="${boleto._id}" type="checkbox">
+                              <input id="${boleto._id}" type="checkbox" value="${boleto.comprobantePago}">
                               <span class="slider round"></span>
                           </label>
                       </td>
@@ -146,8 +145,8 @@ class CargarBoletos extends HTMLElement {
               `;
         }
         this.#guardarCambios(shadow, idSorteo);
+        this.#marcarPagadoSinComp(shadow);
       });
-      this.#marcarPagadoSinComp(shadow)
     });
   }
 
@@ -211,10 +210,9 @@ class CargarBoletos extends HTMLElement {
   }
 
   #marcarPagadoSinComp(shadow) {
-    shadow.querySelectorAll("input[type=checkbox]").forEach(element => {
-      let boleto = new Object();
-      boleto.id = element.id;
-      if (boleto == "") {
+    let checks = shadow.querySelectorAll("input[type=checkbox]");
+    checks.forEach(element => {
+      if (element.value == "") {
         element.addEventListener('click', function () {
           if (element.checked) {
             var opcion = confirm("¿Esta seguro que desea marcar como pagado el boleto sin comprobante?");
@@ -225,17 +223,19 @@ class CargarBoletos extends HTMLElement {
         });
       }
     });
-  }
-
-  #preparaBotonesComprobante(shadow) {
-    let botones = shadow.querySelector(".btnVerComprobante");
-
-    /*  botones.forEach(boton=>{
-        boton.onclick=(evt)=>{
-          evt.preventDefault();
-          Swal.fire('hola');
-        }
-      });*/
+    /*let boleto = new Object();
+     boleto.id = element.id;
+     if (boleto.comprobantePago.length=="") {
+       element.addEventListener('click', function () {
+         if (element.checked) {
+           var opcion = confirm("¿Esta seguro que desea marcar como pagado el boleto sin comprobante?");
+           if (!opcion) {
+             element.checked = false
+           }
+         }
+       });
+     }
+   });*/
   }
 }
 
